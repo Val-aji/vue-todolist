@@ -56,7 +56,7 @@
                   const username = Cookies.get("username")
                   const formData = new FormData()
                   formData.append("username", username)
-                  const result = await instance().post("/getData" formData)
+                  const result = await instance().post("/getData", formData)
                   this.setValueData(result.data.data)
              },
             setIsLogin(res) {
@@ -77,7 +77,7 @@
     
         <div class="LandingPage">
             <AccountTodo @setIsLogin="setIsLogin" />
-            <NavbarHP @setData="setData" />
+            <NavbarHP @setData="setData" @setIsLogin="setIsLogin" />
             <ComponentCard :data="data" @deleteData="deleteData" @selesai="selesai"/>
         </div>
     
