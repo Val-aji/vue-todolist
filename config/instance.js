@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 
 //export const urlAPI = "http://localhost:3000";
-export const urlAPI = "https://backend-vue-todolist-production.up.railway.app/"
+export const urlAPI = "https://backend-vue-todolist-production.up.railway.app"
 export const cekLogin = async() => {
     const token = Cookies.get("token")
     const username = Cookies.get("username")
