@@ -39,7 +39,7 @@
                     const formData = new FormData()
                     formData.append("username", username)
                     formData.append("title", this.title)
-                    instance.post("/todolist", formData)
+                    instance().post("/todolist", formData)
                 }
                 this.title = ""
             }
