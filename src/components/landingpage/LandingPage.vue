@@ -5,12 +5,32 @@
     import NavbarHP from "./NavbarHp.vue";
     import ComponentCard from "../models/card/ComponentCard.vue";
     import {ref} from "vue";
+    import {instance} from "../../../config/instance.js"
+    import Cookies from "js-cookie"
+
 
     export default {
         name: "LandingPage",
+        data() {
+           return {
+               isLogin: false
+           }
+        },
+        watch: {
+            isLogin(res) {
+               if(res) {
+                  this.getDataAPI()
+               } else {
+                  this.setValueData([])
+               }
+            }
+        },
         setup() {
             //title, tanggalMulai, tanggalBerakhir, status
             const data = ref([])
+            const setValueData = res => {
+                data.value = res
+            }
             const setData = res => {
                 data.value.push({...res, id: data.value.length})
             }
@@ -28,8 +48,20 @@
                 })
                 data.value = newData
             }
-            return {data, setData, deleteData, selesai}
+            return {data, setData, deleteData, selesai, setValueData}
             
+        },
+        methods: {
+           async getDataAPI() {
+                  const username = Cookies.get("username")
+                  const formData = new FormData()
+                  formData.append("username", username)
+                  const result = await instance.post("/getData" formData)
+                  this.setValueData(result.data.data)
+             },
+            setIsLogin(res) {
+               this.isLogin = res
+            }
         },
         components: {
             NavBar,
@@ -44,7 +76,7 @@
         <NavBar />
     
         <div class="LandingPage">
-            <AccountTodo />
+            <AccountTodo @setIsLogin="setIsLogin" />
             <NavbarHP @setData="setData" />
             <ComponentCard :data="data" @deleteData="deleteData" @selesai="selesai"/>
         </div>
