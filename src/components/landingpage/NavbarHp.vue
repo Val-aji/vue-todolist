@@ -37,7 +37,7 @@
         components: {
             InputTodo
         },
-        emits: ["deleteData", "selesai", "setData"],
+        emits: [ "setData"],
         methods: {
             
             setData(res) {
