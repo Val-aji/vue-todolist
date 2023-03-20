@@ -77,8 +77,8 @@
     
         <div class="LandingPage">
             <AccountTodo @setIsLogin="setIsLogin" />
-            <NavbarHP @setData="setData" @setIsLogin="setIsLogin" />
-            <ComponentCard :data="data" @deleteData="deleteData" @selesai="selesai"/>
+            <NavbarHP @setData="setData"  />
+            <ComponentCard :data="data" @deleteData="deleteData" @selesai="selesai" />
         </div>
     
 </template>
