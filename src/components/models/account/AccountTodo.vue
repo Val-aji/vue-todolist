@@ -17,6 +17,12 @@
             }
 
         },
+        watch: {
+           isLogin(res) {
+              this.$emit("setIsLogin", res)
+           }
+        },
+        emits: ["setIsLogin"],
         async created() {
             try {
                 const result = await cekLogin()
