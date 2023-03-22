@@ -6,49 +6,39 @@
         name:"NavbarHP",
         data() {
             return {
-                data: []
+                navbarHP: [
+                    {id: 0, name: "proses", status: true},
+                    {id: 1, name: "selesai", status: false}
+                ],
+                posisi: "proses"
             }
-        },
-        watch: {
-            data(newValue) {
-                this.$emit("setData", newValue)
-            }
-        },
-        setup() {
-            const navbarHP = ref([
-                {id: 0, name: "proses", status: true},
-                {id: 1, name: "selesai", status: false}
-            ])
-            const status = ref(true)
-            const setStatus = index => {
-                navbarHP.value.map((item, indexMap) => {
-                    if(item.id === index) {
-                        navbarHP.value[indexMap].status = true
-                        status.value = false
-                    }  else {
-                        navbarHP.value[indexMap].status = false
-                        status.value = true
-                    }
-                })
-                
-            }
-            return {navbarHP, setStatus, status}
         },
         components: {
             InputTodo
         },
-        emits: [ "setData"],
+        beforeMount() {
+            this.$emit("setPosisi", this.posisi)
+        },
+        emits: [ "setData", "setPosisi"],
         methods: {
-            
+            setStatus(index) {
+                const newNav = this.navbarHP.slice().map(item => {
+                    const obj = {...item}
+                    if(item.id === index) {
+                        obj.status = true
+                        this.posisi = obj.name
+                    } else {
+                        obj.status = false
+                    }
+                    return obj
+                })
+                this.$emit("setPosisi", this.posisi)
+                this.navbarHP = newNav
+            },
             setData(res) {
-                this.data = res
+                this.$emit("setData", res)
             },
-            deleteData(id) {
-                this.$emit("deleteData". id)
-            },
-            selesai(id) {
-                this.$emit("selesai". id)
-            }
+            
         }
     }
 
@@ -72,7 +62,7 @@
                 
             </div>
         </div>
-        <InputTodo v-if="status" class="w-5/6" :class="status ? 'flex sm:hidden' : ''" @setData="setData" @deleteData="deleteData" @selesai="selesai"/>
+        <InputTodo class="w-5/6 flex sm:hidden' : ''" @setData="(res) => $emit('setData', res)" />
     </div>
     
 

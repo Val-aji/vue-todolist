@@ -22,7 +22,7 @@
               this.$emit("setIsLogin", res)
            }
         },
-        emits: ["setIsLogin"],
+        emits: ["setIsLogin", "setData"],
         async created() {
             try {
                 const result = await cekLogin()
@@ -68,7 +68,8 @@
 
         <div class="containerAccount" v-else>
             <div class="containerInputTodoAccount w-[40%] hidden sm:block mx-auto">
-                <InputTodo class="w-full flex  h-max" />
+                <InputTodo class="w-full flex  h-max" @setData="(res) => $emit('setData', res)" 
+                />
             </div>
             
             <div class="Account" >

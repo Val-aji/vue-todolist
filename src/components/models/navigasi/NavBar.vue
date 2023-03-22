@@ -10,7 +10,12 @@
             return {
                 logoDarkOff,
                 logoDarkOn,
-                dark: false
+                dark: false,
+                listTombol: [
+                    {id: 0,name: "Proses", status: true, myFunction: () => this.setStatus(0)},
+                    {id: 1,name: "Selesai", status: false, myFunction: () => this.setStatus(1)},
+                    {id: 2,name: " ", status: false}
+                ]
             }
         },
         watch: {
@@ -24,35 +29,26 @@
                 }
             }
         },
-        setup() {
-            const setStatus = index => {
-                listTombol.value.forEach((itemList, indexList) => {
-                    if(index === indexList) {
-                        listTombol.value[index].status = true
-                        
-                    } else {
-                        listTombol.value[indexList].status = false
-                    }
-                    console.log(index)
-                })
-            }
-            const list = [
-                {name: "Proses", status: true, myFunction: () => setStatus(0)},
-                {name: "Selesai", status: false, myFunction: () => setStatus(1)},
-                {name: " ", status: false}
-            ]
-            const listTombol = ref(list)
-            
-            return {listTombol}
-        },
         beforeMount() {
             const darkTodolist = Cookie.get("darkTodolist")
             this.dark = darkTodolist
         },
+        emits: ["setPosisi"],
         methods: {
             handleDarkMode() {
                 this.dark = !this.dark
             },
+            setStatus(index) {
+                this.listTombol.map(item => {
+                    if(item.id === index) {
+                        item.status = true
+                        this.$emit("setPosisi", item.name.toLowerCase())
+                    } else {
+                        item.status = false
+                    }
+                    return item
+                })
+            }
             
         }
     }

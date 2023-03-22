@@ -18,7 +18,7 @@
         emits: ["setData"],
         methods: {
             async tambahData() {
-                console.log("tambah")
+
                 if(!this.title) {
                     return false
                 }

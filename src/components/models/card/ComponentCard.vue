@@ -12,7 +12,7 @@
                 logoSelesaiDouble,
             }
         },
-        emits: ["deleteData, selesai"],
+        emits: ["eventData"],
         props: {
             text: String,
             data: Object,
@@ -20,20 +20,13 @@
         components: {
             InputTodo
         },
-        methods: {
-            deleteData(id) {
-                this.$emit("deleteData", id)
-            },
-            selesai(id) {
-                this.$emit("selesai", id)
-            }
-        }
     }
 </script>
 
 <template>
     <div class="ComponentCard">
         <div class="cardTodo w-full flex flex-wrap">
+            <p v-if="data.length === 0" class="POPPINS mx-auto mt-[20vh]">Data tidak ditemukan</p>
             <div v-for="(dat, indexx) of data"
                 class="card border border-[2px]" 
                 :class="dat.status ? 'border-green-600  dark:border-green-400' : 'border-red-600 dark:border-dark-400'"
@@ -50,13 +43,13 @@
                     <button 
                         v-html="logoHapus"
                         class="text-red-700" 
-                        @click="() => deleteData(dat.id)"
+                        @click="() => $emit('eventData', 'delete', dat.id)"
                     >
                     </button>
                     <button 
                         v-html="logoSelesai"
                         class="text-green-700" 
-                        @click="() => selesai(dat.id)"
+                        @click="() => $emit('eventData', 'selesai', dat.id)"
                     >
                     </button>    
                 </div>
