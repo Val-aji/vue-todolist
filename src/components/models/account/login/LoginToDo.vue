@@ -37,7 +37,16 @@ import { urlAPI } from "../../../../../config/instance";
                     }
                     
                 } catch (error) {
-                    console.log({error})
+                    const {status} = error.response.data
+                    
+                    if(status === 401) {
+                        alert("Password salah!")
+                    } else if(status === 404) {
+                        alert("username tidak ditemukan!")
+                    } else {
+                        alert("login gagal")
+                        console.log({error})    
+                    }
                 }
                 
 

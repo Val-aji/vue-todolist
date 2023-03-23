@@ -19,7 +19,7 @@
         beforeMount() {
             this.$emit("setPosisi", this.posisi)
         },
-        emits: [ "setData", "setPosisi"],
+        emits: [ "setData", "setPosisi", "setIsLogin"],
         methods: {
             setStatus(index) {
                 const newNav = this.navbarHP.slice().map(item => {
@@ -38,7 +38,9 @@
             setData(res) {
                 this.$emit("setData", res)
             },
-            
+            setIsLogin(res) {
+                this.$emit("setIsLogin", res)
+            }
         }
     }
 
@@ -62,7 +64,7 @@
                 
             </div>
         </div>
-        <InputTodo class="w-5/6 flex sm:hidden' : ''" @setData="(res) => $emit('setData', res)" />
+        <InputTodo @setIsLogin="setIsLogin" class="w-5/6 flex sm:hidden' : ''" @setData="(res) => $emit('setData', res)" />
     </div>
     
 

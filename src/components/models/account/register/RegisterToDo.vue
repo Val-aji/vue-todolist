@@ -21,30 +21,51 @@
                 
                 try {
                     const {namaLengkap, ID, password} = this
+
+                    if(this.namaLengkap.length > 50) {
+                        this.isError = true
+                        this.pesanError = "Nama Lengkap maksimal 50 karakter!"
+
+                        return false
+                    } else if(this.ID.length > 30) {
+                        this.isError = true
+                        this.pesanError = "Username maksimal 30 karakter!"
+
+                        return false
+                    }
+
                     const formData = new FormData()
+
                     formData.append("namaLengkap", namaLengkap)
                     formData.append("username", ID)
                     formData.append("password", password)
+
                     const result = await axios.post(`${urlAPI}/client/register`, formData, {
                         headers: {
                             "Content-Type": "multipart/form-data"
                         }
                     })
+
                     if(result) {
                         this.isError = false
                         console.log({result})
                         alert("daftar berhasil")
                         location.reload()
-                        
+                    } else {
+                        return false
                     }
-                    
                 } catch (error) {
                     const {status} = error.response.data
                     if(status === 409) {
                         this.isError = true
+                        
                         this.pesanError = "email telah ada"
+                    } else {
+                        this.isError = true
+                        this.pesanError = "Registrasi gagal!"
+                        console.log({error})
                     }
-                    console.log({error})
+                    
                 }
             }
         }

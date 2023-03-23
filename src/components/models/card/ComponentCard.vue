@@ -25,7 +25,7 @@
 
 <template>
     <div class="ComponentCard">
-        <div class="cardTodo w-full flex flex-wrap">
+        <div class="cardTodo w-full flex flex-wrap justify-end">
             <p v-if="data.length === 0" class="POPPINS mx-auto mt-[20vh]">Data tidak ditemukan</p>
             <div v-for="(dat, indexx) of data"
                 class="card border border-[2px]" 

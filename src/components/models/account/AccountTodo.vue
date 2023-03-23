@@ -3,8 +3,9 @@
     import RegisterToDo from "./register/RegisterToDo.vue";
     import LoginToDo from "./login/LoginToDo.vue"
     import InputTodo from "../inputTodo/InputTodo.vue";
-    import { cekLogin } from "../../../../config/instance";
+    import { cekLogin, optionAxios, urlAPI } from "../../../../config/instance";
     import Cookies from "js-cookie";
+    import axios from "axios";
 
     export default {
         name: "AccountTodo",
@@ -13,7 +14,8 @@
                 isLogin: false,
                 posisi: "account",
                 namaLengkap: "Guest",
-                bio: "Bot Computer"
+                bio: "Bot Computer",
+                isUbah: false
             }
 
         },
@@ -54,6 +56,40 @@
                 Cookies.remove("token")
                 location.reload()
             },
+            async ubahData() {
+                this.isUbah = !this.isUbah
+
+                const {isUbah} = this
+                if(!isUbah) {
+                    try {
+                        const username = Cookies.get("username")
+                        const {namaLengkap, bio} = this
+
+                        if(bio.length > 20) {
+                            alert("Bio maksimal 20 karakter")
+                            alert("change data gagal!")
+                            location.reload()
+                            return false
+                        } else if(namaLengkap.length > 50){
+                            alert("Nama Lengkap maksimal 50 karakter")
+                            alert("change data gagal!")
+                            location.reload()
+                            return false
+                        }
+                        const formData = new FormData()
+                        formData.append("username", username)
+                        formData.append("namaLengkap", namaLengkap)
+                        formData.append("bio", bio)
+
+                        await axios.post(urlAPI+"/client/changeData", formData, optionAxios())
+                        
+                        alert("change data success")
+                    } catch (error) {
+                        alert("change data invalid")
+                        console.log({error})
+                    }
+                }
+            }
         }
     }
 
@@ -65,10 +101,10 @@
 
         <RegisterToDo v-else-if="posisi === 'register'" @setPosisi="setPosisi"/>
             
-
         <div class="containerAccount" v-else>
             <div class="containerInputTodoAccount w-[40%] hidden sm:block mx-auto">
-                <InputTodo class="w-full flex  h-max" @setData="(res) => $emit('setData', res)" 
+                <InputTodo @setIsLogin="setIsLogin" 
+                class="w-full flex  h-max" @setData="(res) => $emit('setData', res)" 
                 />
             </div>
             
@@ -80,23 +116,31 @@
                 >
                 
                 <div class="identitas">
-                    <p 
-                        class="INTER namaProfile"
-                    >   
-                        {{ namaLengkap }}
-                    </p>
-                    <p 
-                        class="OPENSANS bioProfile w-max mx-auto text-center"
-                    >
-                        {{ bio }}
-                    </p>
+                    <input type="text" 
+                        class="INTER namaProfile bg-inherit border-none outline-none"
+                        v-model="namaLengkap"
+                        :readonly="!isUbah"
+                        :class="isUbah ? 'inputActive' : ''"
+                        :placeholder="isUbah ? 'your fullname...' : ''"
+                    />   
+                    <input type="text" 
+                        class="OPENSANS bioProfile w-full  bg-inherit border-none outline-none text-center"
+                        v-model="bio"
+                        :readonly="!isUbah"
+                        :class="isUbah ? 'inputActive' : ''"
+                        :placeholder="isUbah ? 'your bio...' : ''"
+                    />
                     <div class="tombol w-full">
                         <div class="login" v-if="isLogin">
-                            <button class="POPPINS tombolLogin bg-dark dark:bg-white text-light dark:text-dark mt-4 mb-2">
-                                ubah profile
+                            <button 
+                                class="POPPINS tombolLogin bg-dark dark:bg-white text-light dark:text-dark mt-4 mb-2"
+                                @click="ubahData"
+                            >
+                                {{(isUbah) ? "save profile" : "ubah profilemu"}}
+                                
                             </button>
                             <button 
-
+                                v-if="!isUbah"
                                 class="tombolLogin bg-green-500 POPPINS "
                                 @click="handleLogout"
                                 >  

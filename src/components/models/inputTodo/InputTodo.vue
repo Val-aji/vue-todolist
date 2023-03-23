@@ -1,8 +1,9 @@
 <script>
     import "./index.css";
     import { logoTambah } from "../../../assets/logo";
-    import { instance } from "../../../../config/instance";
+    import { optionAxios, urlAPI } from "../../../../config/instance";
     import Cookies from "js-cookie";
+    import axios from "axios";
 
     export default {
         name: "inputTodo",
@@ -15,18 +16,16 @@
         props: {
             layarHP: Boolean
         },
-        emits: ["setData"],
+        emits: ["setData", "setIsLogin"],
         methods: {
             async tambahData() {
-
                 if(!this.title) {
                     return false
                 }
                 
-                const cekLogin = await instance()
                 const username = Cookies.get("username")
-                if(!cekLogin || !username) {
-                    
+                if(!optionAxios || !username) {
+
                     const tanggalMulai = new Date().toLocaleString("ID-id", {timezone: "asia/jakarta"})
                     const obj = {
                         title: this.title,
@@ -34,12 +33,24 @@
                         tanggalMulai,
                         tanggalBerakhir: null
                     }
+
                     this.$emit("setData", obj)
                 } else {
                     const formData = new FormData()
                     formData.append("username", username)
                     formData.append("title", this.title)
-                    instance().post("/todolist", formData)
+
+                    try {
+                        await axios.post(urlAPI+"/todolist", formData, optionAxios())
+
+                        this.$emit("setIsLogin", false)
+                        setTimeout(() => {
+                            this.$emit("setIsLogin", true)
+                        }, 100)
+                    } catch (error) {
+                        console.log({error})
+                    }
+                    
                 }
                 this.title = ""
             }

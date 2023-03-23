@@ -2,7 +2,7 @@
 
 @layer components {
     .cardTodo > .card {
-        @apply flex justify-between w-5/6 mx-auto text-[12px] mt-[5vh] bg-[#333333] dark:bg-[#cccccc] text-light dark:text-dark px-[2vw] pt-[1vh] rounded-tl-xl pb-[2vh] sm:w-[45%] 
+        @apply flex justify-between  w-5/6 mx-auto text-[12px] mt-[5vh] bg-[#333333] dark:bg-[#cccccc] text-light dark:text-dark px-[2vw] pt-[1vh] rounded-tl-xl pb-[2vh] sm:w-[45%] 
     }   
 
     .cardTodo > .card > .containerTitle {

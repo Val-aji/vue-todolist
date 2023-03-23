@@ -1,17 +1,18 @@
 import axios from "axios"
 import Cookies from "js-cookie";
 
+export const urlAPI = "http://localhost:3000";
 
-//export const urlAPI = "http://localhost:3000";
-export const urlAPI = "https://backend-vue-todolist-production.up.railway.app"
 export const cekLogin = async() => {
     const token = Cookies.get("token")
     const username = Cookies.get("username")
-
+    if(!username || !token ) {
+        return false
+    }
     const formData = new FormData()
     formData.append("username", username)
     formData.append("token", token)
-
+    
     try {
         const result = await axios.post(`${urlAPI}/client/cekLogin`, formData, {
             headers: {
@@ -25,18 +26,17 @@ export const cekLogin = async() => {
     
 }
 
-export const instance = async() => {
+export const optionAxios = () => {
     try {
         const token = Cookies.get("token")
         if(!token) return false
 
-        const result = axios.create({
-            baseURL: urlAPI,
+        const result = {
             headers: {
                 "Content-Type": "multipart/form-data",
                 "Authorization": token
             }
-        })
+        }
         return result
 
     } catch (error) {
